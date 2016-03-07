@@ -1,11 +1,7 @@
 #! /bin/bash
-server="$(cat config/server)"
-key="$(cat config/key)"
-key2="$(cat config/key2)"
-ip="$(cat config/ip)"
-helpfile="$(cat config/helps)"
+source config.sh
 mkdir ipinfo
-
+helpfile="$(cat helps)"
 
 
 function alive { # will print stdout if responds to ping
