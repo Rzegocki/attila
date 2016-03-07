@@ -1,0 +1,15 @@
+attila is the combs bot created by bloc
+commands are as follows:
+?help       to get this list
+?source     to get the source of the bot
+attila: $ipaddr is $username
+        this will assign the last octect of an ip with a username
+
+attila: forget $ipaddr
+        this will unassign the ip to a username
+
+?who is alive
+        this will respond with ips that ping
+
+?free ips
+        this will respond with available ip addresses
