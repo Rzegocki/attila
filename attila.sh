@@ -1,6 +1,6 @@
 #! /bin/bash
 source config.sh
-mkdir ipinfo
+mkdir -p ipinfo
 helpfile="$(cat helps)"
 
 
@@ -45,11 +45,11 @@ IFS=$saveIFS
 function ipuser { #assigns username to ip
     filename="`echo "$2" | cut -d ' ' -f2 `"
     username="`echo "$2" | cut -d ' ' -f4- `"
-        if `echo "$filename" | egrep '[0-9][0-9][0-9]' > /dev/null`; then
-            if [ -z "$username" ]; then
-                rm ipinfo/$filename
+        if `echo "$filename" | egrep -q '^[1-2][0-9][0-9]$'`; then
+            if [ -z "$username" ]; then 
+                rm -- "ipinfo/$filename"
             else
-            echo "$username" > ipinfo/$filename    
+            echo "$username" > "ipinfo/$filename"    
             fi
             send "PRIVMSG $1 :success"
         fi        
@@ -57,7 +57,7 @@ function ipuser { #assigns username to ip
 #function that deletes unused ip addresses
 function forget {
     forgetme="`echo "$message" | cut -d ' ' -f3 `"    
-            rm ipinfo/$forgetme
+            rm -- "ipinfo/$forgetme"
     send "PRIVMSG $chan :success"
 }
 
@@ -95,12 +95,12 @@ tail -f .botfile | openssl s_client -connect $server:6697 | while true; do
         message="`echo $irc | tr -d "\r\n" | cut -d ' ' -f4- | cut -c 2-`"
         if `echo $message| egrep '^attila:\s+\S+\s+is\s' > /dev/null`;then
             ipuser "$chan" "$message"
-        elif `echo "$message" | egrep '^attila: forget\s+[0-9][0-9][0-9]$' > /dev/null`;then
+        elif `echo "$message" | egrep -q '^attila: forget\s+[0-9][0-9][0-9]$'`;then
             forget $chan
         elif `echo "$message"| cut -c 1 | grep '?' > /dev/null`; then
-            if `echo "$message" | cut -c 2- | egrep '^free ips$' > /dev/null`;then
+            if `echo "$message" | cut -c 2- | egrep -q '^free ips$'`;then
                 free "$chan"
-            elif `echo "$message" | cut -c 2- | egrep '^who is alive$' > /dev/null`;then
+            elif `echo "$message" | cut -c 2- | egrep -q '^who is alive$'`;then
                 alive "$chan"
             elif `echo "$message" | cut -c 2- | egrep '^help$' > /dev/null`;then
                 helps "$chan"
