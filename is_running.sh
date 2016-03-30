@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if  pidof -x "attila.sh">/dev/null
+if pidof -x "attila.sh">/dev/null
 	then
 	exit 0
 else 
